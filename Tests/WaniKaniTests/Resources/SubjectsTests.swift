@@ -208,13 +208,20 @@ class SubjectsTests: XCTestCase {
     var context: ModelContext?
 
     override func setUpWithError() throws {
-        let schema = Schema([Radical.self])
-        let config = ModelConfiguration(schema: schema, inMemory: true)
-        guard let container: ModelContainer = try? ModelContainer(for: schema, configurations: [config]) else {
-            XCTFail("Failed to set up model container")
-            return
+        if context == nil {
+            let schema = Schema([
+                Radical.self,
+                Kanji.self,
+                Vocabulary.self,
+                KanaVocabulary.self
+            ])
+            let config = ModelConfiguration(schema: schema, inMemory: true)
+            guard let container: ModelContainer = try? ModelContainer(for: schema, configurations: [config]) else {
+                XCTFail("Failed to set up model container")
+                return
+            }
+            context = ModelContext(container)
         }
-        context = ModelContext(container)
     }
     
     func testSubjectList() async throws {

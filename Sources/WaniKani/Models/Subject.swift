@@ -304,14 +304,26 @@ public struct AuxiliaryMeaning: Codable, Hashable {
     /// A singular subject meaning.
     public var meaning: String
     /// When evaluating user input, allowlisted meanings are used to match for correctness. Blocklisted meanings are used to match for incorrectness.
-    public var type: Kind
+    @Transient public var type: Kind {
+        return Kind(rawValue: typeString)!
+    }
+    
+    private var typeString: String
 
     public init(
         meaning: String,
         type: Kind
     ) {
         self.meaning = meaning
-        self.type = type
+        self.typeString = type.rawValue
+    }
+    
+    public init(
+        meaning: String,
+        typeString: String
+    ) {
+        self.meaning = meaning
+        self.typeString = typeString
     }
 
     public enum Kind: String, Codable, Hashable {
@@ -449,14 +461,18 @@ public class Radical: ModelProtocol, SubjectProtocol {
         /// The content type of the image. Currently the WaniKani system delivers `image/png` and `image/svg+xml`.
         public var contentType: String
         /// Details about the image.
-        public var metadata: Metadata
+        @Transient public var metadata: Metadata {
+            try! JSONDecoder().decode(Metadata.self, from: metadataJson.data(using: .utf8)!)
+        }
+        
+        private var metadataJson: String
 
         public init(
             url: URL,
             metadata: Metadata
         ) {
             self.url = url
-            self.metadata = metadata
+            self.metadataJson = String(data: try! JSONEncoder().encode(metadata), encoding: .utf8)!
             switch metadata {
             case .svg:
                 self.contentType = "image/svg+xml"
@@ -475,9 +491,9 @@ public class Radical: ModelProtocol, SubjectProtocol {
 
             switch contentType {
             case "image/svg+xml":
-                metadata = try .svg(container.decode(Metadata.SVG.self, forKey: .metadata))
+                metadataJson = String(data: try! JSONEncoder().encode(try Metadata.svg(container.decode(Metadata.SVG.self, forKey: .metadata))), encoding: .utf8)!
             case "image/png":
-                metadata = try .png(container.decode(Metadata.PNG.self, forKey: .metadata))
+                metadataJson = String(data: try! JSONEncoder().encode(try Metadata.png(container.decode(Metadata.PNG.self, forKey: .metadata))), encoding: .utf8)!
             default:
                 throw DecodingError.dataCorruptedError(
                     forKey: .metadata,
