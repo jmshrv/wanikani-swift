@@ -1,4 +1,5 @@
 import Foundation
+import SwiftData
 
 /// Common properties shared between all Subject variants.
 public protocol SubjectProtocol {
@@ -319,7 +320,8 @@ public struct AuxiliaryMeaning: Codable, Hashable {
     }
 }
 
-public struct Radical: ModelProtocol, SubjectProtocol {
+@Model
+public class Radical: ModelProtocol, SubjectProtocol {
     public let object = "radical"
 
     /// An array of numeric identifiers for the kanji that have the radical as a component.
@@ -334,7 +336,7 @@ public struct Radical: ModelProtocol, SubjectProtocol {
     public var created: Date
     public var documentURL: URL
     public var hidden: Date?
-    public var id: Int
+    @Attribute(.unique) public var id: Int
     public var lastUpdated: Date?
     public var lessonPosition: Int
     public var level: Int
@@ -380,7 +382,7 @@ public struct Radical: ModelProtocol, SubjectProtocol {
         self.url = url
     }
 
-    public init(
+    required public init(
         from decoder: Decoder
     ) throws {
         let modelContainer = try decoder.container(keyedBy: ModelCodingKeys.self)
@@ -622,7 +624,8 @@ public struct Radical: ModelProtocol, SubjectProtocol {
     }
 }
 
-public struct Kanji: ModelProtocol, SubjectProtocol {
+@Model
+public class Kanji: ModelProtocol, SubjectProtocol {
     public let object = "kanji"
 
     /// An array of numeric identifiers for the vocabulary that have the kanji as a component.
@@ -635,7 +638,7 @@ public struct Kanji: ModelProtocol, SubjectProtocol {
     public var created: Date
     public var documentURL: URL
     public var hidden: Date?
-    public var id: Int
+    @Attribute(.unique) public var id: Int
     public var lastUpdated: Date?
     public var lessonPosition: Int
     public var level: Int
@@ -701,7 +704,7 @@ public struct Kanji: ModelProtocol, SubjectProtocol {
         self.url = url
     }
 
-    public init(
+    required public init(
         from decoder: Decoder
     ) throws {
         let modelContainer = try decoder.container(keyedBy: ModelCodingKeys.self)
@@ -830,7 +833,8 @@ public struct Kanji: ModelProtocol, SubjectProtocol {
     }
 }
 
-public struct Vocabulary: ModelProtocol, SubjectProtocol {
+@Model
+public class Vocabulary: ModelProtocol, SubjectProtocol {
     public let object = "vocabulary"
 
     public var auxiliaryMeanings: [AuxiliaryMeaning]
@@ -843,7 +847,7 @@ public struct Vocabulary: ModelProtocol, SubjectProtocol {
     public var created: Date
     public var documentURL: URL
     public var hidden: Date?
-    public var id: Int
+    @Attribute(.unique) public var id: Int
     public var lastUpdated: Date?
     public var lessonPosition: Int
     public var level: Int
@@ -906,7 +910,7 @@ public struct Vocabulary: ModelProtocol, SubjectProtocol {
         self.url = url
     }
 
-    public init(
+    required public init(
         from decoder: Decoder
     ) throws {
         let modelContainer = try decoder.container(keyedBy: ModelCodingKeys.self)
@@ -1104,7 +1108,8 @@ public struct Vocabulary: ModelProtocol, SubjectProtocol {
     }
 }
 
-public struct KanaVocabulary: ModelProtocol, SubjectProtocol {
+@Model
+public class KanaVocabulary: ModelProtocol, SubjectProtocol {
     public let object = "kana_vocabulary"
 
     public var auxiliaryMeanings: [AuxiliaryMeaning]
@@ -1115,7 +1120,7 @@ public struct KanaVocabulary: ModelProtocol, SubjectProtocol {
     public var created: Date
     public var documentURL: URL
     public var hidden: Date?
-    public var id: Int
+    @Attribute(.unique) public var id: Int
     public var lastUpdated: Date?
     public var lessonPosition: Int
     public var level: Int
@@ -1168,7 +1173,7 @@ public struct KanaVocabulary: ModelProtocol, SubjectProtocol {
         self.url = url
     }
 
-    public init(
+    required public init(
         from decoder: Decoder
     ) throws {
         let modelContainer = try decoder.container(keyedBy: ModelCodingKeys.self)

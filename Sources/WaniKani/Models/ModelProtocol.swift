@@ -1,4 +1,5 @@
 import Foundation
+import SwiftData
 
 /// Shared properties between all top-level model types.
 public protocol ModelProtocol: Codable, Hashable, Identifiable {

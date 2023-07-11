@@ -1,4 +1,5 @@
 import Foundation
+import SwiftData
 import XCTest
 
 @testable import WaniKani
@@ -8,7 +9,7 @@ import FoundationNetworking
 #endif
 
 extension Radical {
-    init() {
+    convenience init() {
         self.init(
             amalgamationSubjectIDs: [1, 2],
             auxiliaryMeanings: [
@@ -51,7 +52,7 @@ extension Radical {
 }
 
 extension Kanji {
-    init() {
+    convenience init() {
         self.init(
             amalgamationSubjectIDs: [1, 2],
             auxiliaryMeanings: [
@@ -95,7 +96,7 @@ extension Kanji {
 }
 
 extension Vocabulary {
-    init() {
+    convenience init() {
         self.init(
             auxiliaryMeanings: [
                 AuxiliaryMeaning(
@@ -155,7 +156,7 @@ extension Vocabulary {
 }
 
 extension KanaVocabulary {
-    init() {
+    convenience init() {
         self.init(
             auxiliaryMeanings: [
                 AuxiliaryMeaning(
@@ -204,6 +205,18 @@ extension KanaVocabulary {
 }
 
 class SubjectsTests: XCTestCase {
+    var context: ModelContext?
+
+    override func setUpWithError() throws {
+        let schema = Schema([Radical.self])
+        let config = ModelConfiguration(schema: schema, inMemory: true)
+        guard let container: ModelContainer = try? ModelContainer(for: schema, configurations: [config]) else {
+            XCTFail("Failed to set up model container")
+            return
+        }
+        context = ModelContext(container)
+    }
+    
     func testSubjectList() async throws {
         let expected = ModelCollection(data: [
             Subject.radical(Radical()),
