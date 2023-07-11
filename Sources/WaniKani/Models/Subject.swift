@@ -1019,7 +1019,11 @@ public class Vocabulary: ModelProtocol, SubjectProtocol {
         /// The content type of the audio. Currently the API delivers `audio/mpeg` and `audio/ogg`.
         public var contentType: String
         /// Details about the pronunciation audio.
-        public var metadata: Metadata
+        @Transient public var metadata: Metadata {
+            return try! JSONDecoder().decode(Metadata.self, from: metadataJson.data(using: .utf8)!)
+        }
+        
+        private var metadataJson: String
 
         public init(
             url: URL,
@@ -1028,7 +1032,17 @@ public class Vocabulary: ModelProtocol, SubjectProtocol {
         ) {
             self.url = url
             self.contentType = contentType
-            self.metadata = metadata
+            self.metadataJson = String(data: try! JSONEncoder().encode(metadata), encoding: .utf8)!
+        }
+        
+        public init(
+            url: URL,
+            contentType: String,
+            metadataJson: String
+        ) {
+            self.url = url
+            self.contentType = contentType
+            self.metadataJson = metadataJson
         }
 
         public struct Metadata: Codable, Hashable {
@@ -1074,7 +1088,7 @@ public class Vocabulary: ModelProtocol, SubjectProtocol {
         private enum CodingKeys: String, CodingKey {
             case url
             case contentType = "content_type"
-            case metadata
+            case metadataJson = "metadata"
         }
     }
 
