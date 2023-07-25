@@ -330,6 +330,11 @@ public struct AuxiliaryMeaning: Codable, Hashable {
         case allowlist = "whitelist"
         case blocklist = "blacklist"
     }
+    
+    private enum CodingKeys: String, CodingKey {
+        case meaning
+        case typeString = "type"
+    }
 }
 
 @Model
@@ -799,7 +804,11 @@ public class Kanji: ModelProtocol, SubjectProtocol {
         /// Indicates if the reading is used to evaluate user input for correctness.
         public var isAcceptedAnswer: Bool
         /// The kanji reading's classfication.
-        public var type: Kind
+        @Transient public var type: Kind {
+            return Kind(rawValue: typeString)!
+        }
+        
+        private var typeString: String
 
         public init(
             reading: String,
@@ -810,7 +819,19 @@ public class Kanji: ModelProtocol, SubjectProtocol {
             self.reading = reading
             self.isPrimary = isPrimary
             self.isAcceptedAnswer = isAcceptedAnswer
-            self.type = type
+            self.typeString = type.rawValue
+        }
+        
+        public init(
+            reading: String,
+            isPrimary: Bool,
+            isAcceptedAnswer: Bool,
+            typeString: String
+        ) {
+            self.reading = reading
+            self.isPrimary = isPrimary
+            self.isAcceptedAnswer = isAcceptedAnswer
+            self.typeString = typeString
         }
 
         public enum Kind: String, Codable, Hashable {
@@ -823,7 +844,8 @@ public class Kanji: ModelProtocol, SubjectProtocol {
             case reading
             case isPrimary = "primary"
             case isAcceptedAnswer = "accepted_answer"
-            case type
+//            case type
+            case typeString = "type"
         }
     }
 
@@ -1290,7 +1312,11 @@ public class KanaVocabulary: ModelProtocol, SubjectProtocol {
         /// The content type of the audio. Currently the API delivers `audio/mpeg` and `audio/ogg`.
         public var contentType: String
         /// Details about the pronunciation audio.
-        public var metadata: Metadata
+        @Transient public var metadata: Metadata {
+            return try! JSONDecoder().decode(Metadata.self, from: metadataJson.data(using: .utf8)!)
+        }
+        
+        private var metadataJson: String
 
         public init(
             url: URL,
@@ -1299,7 +1325,17 @@ public class KanaVocabulary: ModelProtocol, SubjectProtocol {
         ) {
             self.url = url
             self.contentType = contentType
-            self.metadata = metadata
+            self.metadataJson = String(data: try! JSONEncoder().encode(metadata), encoding: .utf8)!
+        }
+        
+        public init(
+            url: URL,
+            contentType: String,
+            metadataJson: String
+        ) {
+            self.url = url
+            self.contentType = contentType
+            self.metadataJson = metadataJson
         }
 
         public struct Metadata: Codable, Hashable {
@@ -1345,7 +1381,8 @@ public class KanaVocabulary: ModelProtocol, SubjectProtocol {
         private enum CodingKeys: String, CodingKey {
             case url
             case contentType = "content_type"
-            case metadata
+//            case metadata
+            case metadataJson = "metadata"
         }
     }
 

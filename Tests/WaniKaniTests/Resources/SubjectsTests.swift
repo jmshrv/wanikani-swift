@@ -189,7 +189,7 @@ extension KanaVocabulary {
                 PronunciationAudio(
                     url: URL(),
                     contentType: "audio/ogg",
-                    metadata: PronunciationAudio.Metadata(
+                    metadata: KanaVocabulary.PronunciationAudio.Metadata(
                         gender: "female",
                         sourceID: 0,
                         pronunciation: "ground",
@@ -206,22 +206,45 @@ extension KanaVocabulary {
 
 class SubjectsTests: XCTestCase {
     var context: ModelContext?
-
+    
     override func setUpWithError() throws {
-        if context == nil {
-            let schema = Schema([
-                Radical.self,
-                Kanji.self,
-                Vocabulary.self,
-                KanaVocabulary.self
-            ])
-            let config = ModelConfiguration(schema: schema, inMemory: true)
-            guard let container: ModelContainer = try? ModelContainer(for: schema, configurations: [config]) else {
-                XCTFail("Failed to set up model container")
-                return
-            }
-            context = ModelContext(container)
+        let fullSchema = Schema([
+            Radical.self,
+            Kanji.self,
+            Vocabulary.self,
+            KanaVocabulary.self
+        ])
+        
+        let radicalModelConfiguration = ModelConfiguration(
+            schema: Schema([Radical.self]),
+            url: URL.applicationSupportDirectory.appendingPathComponent("radical.store")
+        )
+        
+        let kanjiModelConfiguration = ModelConfiguration(
+            schema: Schema([Kanji.self]),
+            url: URL.applicationSupportDirectory.appendingPathComponent("kanji.store")
+        )
+        
+        let vocabularyModelConfiguration = ModelConfiguration(
+            schema: Schema([Vocabulary.self]),
+            url: URL.applicationSupportDirectory.appendingPathComponent("vocabulary.store")
+        )
+        
+        let kanaVocabularyModelConfiguration = ModelConfiguration(
+            schema: Schema([KanaVocabulary.self]),
+            url: URL.applicationSupportDirectory.appendingPathComponent("kana_vocabulary.store")
+        )
+        
+        guard let container: ModelContainer = try? ModelContainer(for: fullSchema, configurations: [
+            radicalModelConfiguration,
+            kanjiModelConfiguration,
+            vocabularyModelConfiguration,
+            kanaVocabularyModelConfiguration
+        ]) else {
+            XCTFail("Failed to set up model container")
+            return
         }
+        context = ModelContext(container)
     }
     
     func testSubjectList() async throws {
