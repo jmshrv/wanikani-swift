@@ -304,36 +304,19 @@ public struct AuxiliaryMeaning: Codable, Hashable {
     /// A singular subject meaning.
     public var meaning: String
     /// When evaluating user input, allowlisted meanings are used to match for correctness. Blocklisted meanings are used to match for incorrectness.
-    @Transient public var type: Kind {
-        return Kind(rawValue: typeString)!
-    }
-    
-    private var typeString: String
+    public var type: Kind
 
     public init(
         meaning: String,
         type: Kind
     ) {
         self.meaning = meaning
-        self.typeString = type.rawValue
-    }
-    
-    public init(
-        meaning: String,
-        typeString: String
-    ) {
-        self.meaning = meaning
-        self.typeString = typeString
+        self.type = type
     }
 
     public enum Kind: String, Codable, Hashable {
         case allowlist = "whitelist"
         case blocklist = "blacklist"
-    }
-    
-    private enum CodingKeys: String, CodingKey {
-        case meaning
-        case typeString = "type"
     }
 }
 
@@ -466,18 +449,14 @@ public class Radical: ModelProtocol, SubjectProtocol {
         /// The content type of the image. Currently the WaniKani system delivers `image/png` and `image/svg+xml`.
         public var contentType: String
         /// Details about the image.
-        @Transient public var metadata: Metadata {
-            try! JSONDecoder().decode(Metadata.self, from: metadataJson.data(using: .utf8)!)
-        }
-        
-        private var metadataJson: String
+        public var metadata: Metadata
 
         public init(
             url: URL,
             metadata: Metadata
         ) {
             self.url = url
-            self.metadataJson = String(data: try! JSONEncoder().encode(metadata), encoding: .utf8)!
+            self.metadata = metadata
             switch metadata {
             case .svg:
                 self.contentType = "image/svg+xml"
@@ -496,9 +475,9 @@ public class Radical: ModelProtocol, SubjectProtocol {
 
             switch contentType {
             case "image/svg+xml":
-                metadataJson = String(data: try! JSONEncoder().encode(try Metadata.svg(container.decode(Metadata.SVG.self, forKey: .metadata))), encoding: .utf8)!
+                metadata = try .svg(container.decode(Metadata.SVG.self, forKey: .metadata))
             case "image/png":
-                metadataJson = String(data: try! JSONEncoder().encode(try Metadata.png(container.decode(Metadata.PNG.self, forKey: .metadata))), encoding: .utf8)!
+                metadata = try .png(container.decode(Metadata.PNG.self, forKey: .metadata))
             default:
                 throw DecodingError.dataCorruptedError(
                     forKey: .metadata,
@@ -804,11 +783,7 @@ public class Kanji: ModelProtocol, SubjectProtocol {
         /// Indicates if the reading is used to evaluate user input for correctness.
         public var isAcceptedAnswer: Bool
         /// The kanji reading's classfication.
-        @Transient public var type: Kind {
-            return Kind(rawValue: typeString)!
-        }
-        
-        private var typeString: String
+        public var type: Kind
 
         public init(
             reading: String,
@@ -819,19 +794,7 @@ public class Kanji: ModelProtocol, SubjectProtocol {
             self.reading = reading
             self.isPrimary = isPrimary
             self.isAcceptedAnswer = isAcceptedAnswer
-            self.typeString = type.rawValue
-        }
-        
-        public init(
-            reading: String,
-            isPrimary: Bool,
-            isAcceptedAnswer: Bool,
-            typeString: String
-        ) {
-            self.reading = reading
-            self.isPrimary = isPrimary
-            self.isAcceptedAnswer = isAcceptedAnswer
-            self.typeString = typeString
+            self.type = type
         }
 
         public enum Kind: String, Codable, Hashable {
@@ -844,8 +807,7 @@ public class Kanji: ModelProtocol, SubjectProtocol {
             case reading
             case isPrimary = "primary"
             case isAcceptedAnswer = "accepted_answer"
-//            case type
-            case typeString = "type"
+            case type
         }
     }
 
@@ -1041,11 +1003,7 @@ public class Vocabulary: ModelProtocol, SubjectProtocol {
         /// The content type of the audio. Currently the API delivers `audio/mpeg` and `audio/ogg`.
         public var contentType: String
         /// Details about the pronunciation audio.
-        @Transient public var metadata: Metadata {
-            return try! JSONDecoder().decode(Metadata.self, from: metadataJson.data(using: .utf8)!)
-        }
-        
-        private var metadataJson: String
+        public var metadata: Metadata
 
         public init(
             url: URL,
@@ -1054,17 +1012,7 @@ public class Vocabulary: ModelProtocol, SubjectProtocol {
         ) {
             self.url = url
             self.contentType = contentType
-            self.metadataJson = String(data: try! JSONEncoder().encode(metadata), encoding: .utf8)!
-        }
-        
-        public init(
-            url: URL,
-            contentType: String,
-            metadataJson: String
-        ) {
-            self.url = url
-            self.contentType = contentType
-            self.metadataJson = metadataJson
+            self.metadata = metadata
         }
 
         public struct Metadata: Codable, Hashable {
@@ -1110,7 +1058,7 @@ public class Vocabulary: ModelProtocol, SubjectProtocol {
         private enum CodingKeys: String, CodingKey {
             case url
             case contentType = "content_type"
-            case metadataJson = "metadata"
+            case metadata
         }
     }
 
@@ -1312,11 +1260,7 @@ public class KanaVocabulary: ModelProtocol, SubjectProtocol {
         /// The content type of the audio. Currently the API delivers `audio/mpeg` and `audio/ogg`.
         public var contentType: String
         /// Details about the pronunciation audio.
-        @Transient public var metadata: Metadata {
-            return try! JSONDecoder().decode(Metadata.self, from: metadataJson.data(using: .utf8)!)
-        }
-        
-        private var metadataJson: String
+        public var metadata: Metadata
 
         public init(
             url: URL,
@@ -1325,17 +1269,7 @@ public class KanaVocabulary: ModelProtocol, SubjectProtocol {
         ) {
             self.url = url
             self.contentType = contentType
-            self.metadataJson = String(data: try! JSONEncoder().encode(metadata), encoding: .utf8)!
-        }
-        
-        public init(
-            url: URL,
-            contentType: String,
-            metadataJson: String
-        ) {
-            self.url = url
-            self.contentType = contentType
-            self.metadataJson = metadataJson
+            self.metadata = metadata
         }
 
         public struct Metadata: Codable, Hashable {
@@ -1381,8 +1315,7 @@ public class KanaVocabulary: ModelProtocol, SubjectProtocol {
         private enum CodingKeys: String, CodingKey {
             case url
             case contentType = "content_type"
-//            case metadata
-            case metadataJson = "metadata"
+            case metadata
         }
     }
 
