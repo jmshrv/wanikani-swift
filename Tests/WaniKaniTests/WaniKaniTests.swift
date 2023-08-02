@@ -2,6 +2,7 @@ import Foundation
 import XCTest
 
 @testable import WaniKani
+import WaniKaniTestResources
 
 #if canImport(FoundationNetworking)
 import FoundationNetworking
@@ -46,50 +47,5 @@ class WaniKaniTests: XCTestCase {
             _ = try await testData.client.send(testData.resources.contentResource)
             XCTFail("Expected to have thrown an error, but task fulfilled normally")
         } catch {}
-    }
-
-    private struct TestData {
-        enum Case {
-            case success
-            case successPaginated
-            case successHasBody
-            case badResponse
-            case unsuccessfulResponse
-            case noData
-        }
-
-        var configuration: WaniKani.Configuration = .default
-        var client: WaniKani
-        var resources = MockResources()
-
-        init(
-            testCase: Case = .success
-        ) throws {
-            let responses: [(Data, URLResponse)]
-
-            switch testCase {
-            case .success:
-                responses = try [MockData.mockingSuccess(with: resources.content, url: configuration.version.baseURL)]
-            case .successPaginated:
-                responses = try [
-                    MockData.mockingSuccess(with: resources.paginatedContent, url: configuration.version.baseURL)
-                ]
-            case .successHasBody:
-                responses = try [
-                    MockData.mockingSuccess(with: resources.bodyAndContent, url: configuration.version.baseURL)
-                ]
-            case .badResponse:
-                responses = [MockData.mockingIncompatibleResponse(for: configuration.version.baseURL)]
-            case .unsuccessfulResponse:
-                responses = [MockData.mockingUnsuccessfulResponse(for: configuration.version.baseURL)]
-            case .noData:
-                responses = []
-            }
-
-            client = WaniKani(configuration: configuration, transport: MockTransport(responses: responses))
-            client.token = "a valid token, i guess"
-
-            XCTAssertEqual(client.token, client.configuration.token)
-        }
     }
 }

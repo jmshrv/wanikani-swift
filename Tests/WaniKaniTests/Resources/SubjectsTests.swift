@@ -3,6 +3,7 @@ import SwiftData
 import XCTest
 
 @testable import WaniKani
+import WaniKaniTestResources
 
 #if canImport(FoundationNetworking)
 import FoundationNetworking

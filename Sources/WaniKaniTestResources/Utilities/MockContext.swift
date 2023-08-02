@@ -6,11 +6,11 @@ import Foundation
 import FoundationNetworking
 #endif
 
-struct MockContext {
-    var client: WaniKani
+public struct MockContext {
+    public var client: WaniKani
     var resources = MockResources()
 
-    init<Content: Codable>(
+    public init<Content: Codable>(
         content: Content...
     ) throws {
         let configuration = WaniKani.Configuration.default
@@ -34,7 +34,7 @@ struct MockContext {
     }
 }
 
-extension ModelCollection {
+public extension ModelCollection {
     init(
         data: [Model]
     ) {

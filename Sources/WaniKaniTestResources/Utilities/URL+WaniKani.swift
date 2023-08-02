@@ -4,7 +4,7 @@ import Foundation
 import FoundationNetworking
 #endif
 
-extension URL {
+public extension URL {
     init() {
         self.init(string: "https://www.wanikani.com")!
     }

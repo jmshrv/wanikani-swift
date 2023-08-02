@@ -21,10 +21,14 @@ let package = Package(
             name: "WaniKani",
             dependencies: []
         ),
+        .target(
+            name: "WaniKaniTestResources",
+            dependencies: ["WaniKani"]
+        ),
         // Tests
         .testTarget(
             name: "WaniKaniTests",
-            dependencies: ["WaniKani"]
+            dependencies: ["WaniKani", "WaniKaniTestResources"]
         ),
     ]
 )
