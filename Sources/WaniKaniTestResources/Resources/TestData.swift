@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import XCTest
 @testable import WaniKani
 
 public struct TestData {
@@ -49,7 +48,5 @@ public struct TestData {
 
         client = WaniKani(configuration: configuration, transport: MockTransport(responses: responses))
         client.token = "a valid token, i guess"
-
-        XCTAssertEqual(client.token, client.configuration.token)
     }
 }
