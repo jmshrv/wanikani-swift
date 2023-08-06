@@ -10,8 +10,6 @@ import FoundationNetworking
 #endif
 
 class SubjectsTests: XCTestCase {
-//    Note: SwiftData seems to break equatable (probably a bug?), so we check
-//    hash values instead
     var context: ModelContext?
     
     override func setUpWithError() throws {
@@ -47,7 +45,7 @@ class SubjectsTests: XCTestCase {
                 updatedAfter: .testing
             )
         )
-        XCTAssertEqual(response.data.hashValue, expected.hashValue)
+        XCTAssertEqual(response.data, expected)
     }
     
     func testSubjectGetRadical() async throws {
@@ -55,7 +53,7 @@ class SubjectsTests: XCTestCase {
         let context = try MockContext(content: expected)
         
         let response = try await context.client.send(.subject(0))
-        XCTAssertEqual(response.data.hashValue, expected.hashValue)
+        XCTAssertEqual(response.data, expected)
     }
     
     func testSubjectGetKanji() async throws {
@@ -63,7 +61,7 @@ class SubjectsTests: XCTestCase {
         let context = try MockContext(content: expected)
         
         let response = try await context.client.send(.subject(0))
-        XCTAssertEqual(response.data.hashValue, expected.hashValue)
+        XCTAssertEqual(response.data, expected)
     }
     
     func testSubjectGetVocabulary() async throws {
@@ -71,7 +69,7 @@ class SubjectsTests: XCTestCase {
         let context = try MockContext(content: expected)
         
         let response = try await context.client.send(.subject(0))
-        XCTAssertEqual(response.data.hashValue, expected.hashValue)
+        XCTAssertEqual(response.data, expected)
     }
     
     func testSubjectGetKanaVocabulary() async throws {
@@ -79,7 +77,7 @@ class SubjectsTests: XCTestCase {
         let context = try MockContext(content: expected)
         
         let response = try await context.client.send(.subject(0))
-        XCTAssertEqual(response.data.hashValue, expected.hashValue)
+        XCTAssertEqual(response.data, expected)
     }
     
     func testStore() async throws {
@@ -96,6 +94,6 @@ class SubjectsTests: XCTestCase {
         let fetchedRadicals = try context!.fetch(fetchDescriptor)
         
         XCTAssertEqual(fetchedRadicals.count, 1)
-        XCTAssertEqual(fetchedRadicals.first?.hashValue, data.hashValue)
+        XCTAssertEqual(fetchedRadicals.first, data)
     }
 }
