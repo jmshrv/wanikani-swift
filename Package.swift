@@ -13,7 +13,11 @@ let package = Package(
     products: [
         .library(
             name: "WaniKani",
-            targets: ["WaniKani", "WaniKaniTestResources"]
+            targets: ["WaniKani"]
+        ),
+        .library(
+            name: "WaniKaniTestResources",
+            targets: ["WaniKaniTestResources"]
         )
     ],
     targets: [

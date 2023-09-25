@@ -322,6 +322,7 @@ public struct AuxiliaryMeaning: Codable, Hashable {
 
 @Model
 public class Radical: ModelProtocol, SubjectProtocol {
+    @Transient
     public let object = "radical"
 
     /// An array of numeric identifiers for the kanji that have the radical as a component.
@@ -648,6 +649,7 @@ extension Radical: Equatable {
 
 @Model
 public class Kanji: ModelProtocol, SubjectProtocol {
+    @Transient
     public let object = "kanji"
 
     /// An array of numeric identifiers for the vocabulary that have the kanji as a component.
@@ -884,6 +886,7 @@ extension Kanji: Equatable {
 
 @Model
 public class Vocabulary: ModelProtocol, SubjectProtocol {
+    @Transient
     public let object = "vocabulary"
 
     public var auxiliaryMeanings: [AuxiliaryMeaning]
@@ -1185,6 +1188,7 @@ extension Vocabulary: Equatable {
 
 @Model
 public class KanaVocabulary: ModelProtocol, SubjectProtocol {
+    @Transient
     public let object = "kana_vocabulary"
 
     public var auxiliaryMeanings: [AuxiliaryMeaning]
