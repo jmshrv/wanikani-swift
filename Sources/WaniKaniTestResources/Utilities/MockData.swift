@@ -1,6 +1,6 @@
 import Foundation
 
-@testable import WaniKani
+import WaniKani
 
 #if canImport(FoundationNetworking)
 import FoundationNetworking

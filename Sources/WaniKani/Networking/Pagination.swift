@@ -31,7 +31,7 @@ public struct Page: Codable, Hashable {
         return PageOptions(url: previousURL)
     }
 
-    init(
+    public init(
         perPageCount: Int,
         nextURL: URL? = nil,
         previousURL: URL? = nil

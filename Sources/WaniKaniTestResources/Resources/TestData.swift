@@ -6,7 +6,7 @@
 //
 
 import Foundation
-@testable import WaniKani
+import WaniKani
 
 public struct TestData {
     public enum Case {

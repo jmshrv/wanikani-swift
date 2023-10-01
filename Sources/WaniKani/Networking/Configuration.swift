@@ -37,7 +37,7 @@ extension WaniKani {
         /// API version 2, revision 20170710.
         public static let v2: Self = APIVersion(version: "v2", revision: "20170710")
 
-        var baseURL = URL(string: "https://api.wanikani.com")!
+        public var baseURL = URL(string: "https://api.wanikani.com")!
         var version: String
         var revision: String
 

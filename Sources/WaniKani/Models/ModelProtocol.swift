@@ -52,7 +52,7 @@ public struct ModelCollection<Model: ModelProtocol>: ModelProtocol, Collection {
         elements.endIndex
     }
 
-    init(
+    public init(
         url: URL,
         lastUpdated: Date? = nil,
         totalCount: Int,
