@@ -625,6 +625,28 @@ public class Radical: ModelProtocol, SubjectProtocol {
     }
 }
 
+extension Radical: Equatable {
+    public static func == (lhs: Radical, rhs: Radical) -> Bool {
+        return lhs.id == rhs.id &&
+        lhs.object == rhs.object &&
+        lhs.auxiliaryMeanings == rhs.auxiliaryMeanings &&
+        lhs.created == rhs.created &&
+        lhs.documentURL == rhs.documentURL &&
+        lhs.hidden == rhs.hidden &&
+        lhs.lastUpdated == rhs.lastUpdated &&
+        lhs.lessonPosition == rhs.lessonPosition &&
+        lhs.level == rhs.level &&
+        lhs.meaningMnemonic == rhs.meaningMnemonic &&
+        lhs.meanings == rhs.meanings &&
+        lhs.slug == rhs.slug &&
+        lhs.spacedRepetitionSystemID == rhs.spacedRepetitionSystemID &&
+        lhs.url == rhs.url &&
+        lhs.amalgamationSubjectIDs == rhs.amalgamationSubjectIDs &&
+        lhs.characterImages == lhs.characterImages &&
+        lhs.characters == rhs.characters
+    }
+}
+
 @Model
 public class Kanji: ModelProtocol, SubjectProtocol {
     @Transient
@@ -832,6 +854,33 @@ public class Kanji: ModelProtocol, SubjectProtocol {
         case slug
         case spacedRepetitionSystemID = "spaced_repetition_system_id"
         case visuallySimilarSubjectIDs = "visually_similar_subject_ids"
+    }
+}
+
+extension Kanji: Equatable {
+    public static func == (lhs: Kanji, rhs: Kanji) -> Bool {
+        return lhs.object == rhs.object &&
+        lhs.auxiliaryMeanings == rhs.auxiliaryMeanings &&
+        lhs.created == rhs.created &&
+        lhs.documentURL == rhs.documentURL &&
+        lhs.hidden == rhs.hidden &&
+        lhs.id == rhs.id &&
+        lhs.lastUpdated == rhs.lastUpdated &&
+        lhs.lessonPosition == rhs.lessonPosition &&
+        lhs.level == rhs.level &&
+        lhs.meaningMnemonic == rhs.meaningMnemonic &&
+        lhs.meanings == rhs.meanings &&
+        lhs.slug == rhs.slug &&
+        lhs.spacedRepetitionSystemID == rhs.spacedRepetitionSystemID &&
+        lhs.url == rhs.url &&
+        lhs.amalgamationSubjectIDs == rhs.amalgamationSubjectIDs &&
+        lhs.characters == rhs.characters &&
+        lhs.componentSubjectIDs == rhs.componentSubjectIDs &&
+        lhs.meaningHint == rhs.meaningHint &&
+        lhs.readingHint == rhs.readingHint &&
+        lhs.readingMnemonic == rhs.readingMnemonic &&
+        lhs.readings == rhs.readings &&
+        lhs.visuallySimilarSubjectIDs == rhs.visuallySimilarSubjectIDs
     }
 }
 
@@ -1111,6 +1160,32 @@ public class Vocabulary: ModelProtocol, SubjectProtocol {
     }
 }
 
+extension Vocabulary: Equatable {
+    public static func == (lhs: Vocabulary, rhs: Vocabulary) -> Bool {
+        return lhs.object == rhs.object &&
+        lhs.auxiliaryMeanings == rhs.auxiliaryMeanings &&
+        lhs.created == rhs.created &&
+        lhs.documentURL == lhs.documentURL &&
+        lhs.hidden == rhs.hidden &&
+        lhs.id == rhs.id &&
+        lhs.lastUpdated == rhs.lastUpdated &&
+        lhs.lessonPosition == rhs.lessonPosition &&
+        lhs.level == rhs.level &&
+        lhs.meaningMnemonic == rhs.meaningMnemonic &&
+        lhs.meanings == rhs.meanings &&
+        lhs.slug == rhs.slug &&
+        lhs.spacedRepetitionSystemID == rhs.spacedRepetitionSystemID &&
+        lhs.url == rhs.url &&
+        lhs.characters == rhs.characters &&
+        lhs.componentSubjectIDs == rhs.componentSubjectIDs &&
+        lhs.contextSentences == rhs.contextSentences &&
+        lhs.partsOfSpeech == rhs.partsOfSpeech &&
+        lhs.pronunciationAudios == rhs.pronunciationAudios &&
+        lhs.readingMnemonic == rhs.readingMnemonic &&
+        lhs.readings == rhs.readings
+    }
+}
+
 @Model
 public class KanaVocabulary: ModelProtocol, SubjectProtocol {
     @Transient
@@ -1366,5 +1441,28 @@ public class KanaVocabulary: ModelProtocol, SubjectProtocol {
         case readingMnemonic = "reading_mnemonic"
         case slug
         case spacedRepetitionSystemID = "spaced_repetition_system_id"
+    }
+}
+
+extension KanaVocabulary: Equatable {
+    public static func == (lhs: KanaVocabulary, rhs: KanaVocabulary) -> Bool {
+        return lhs.object == rhs.object &&
+        lhs.auxiliaryMeanings == rhs.auxiliaryMeanings &&
+        lhs.created == rhs.created &&
+        lhs.documentURL == rhs.documentURL &&
+        lhs.hidden == rhs.hidden &&
+        lhs.id == rhs.id &&
+        lhs.lastUpdated == rhs.lastUpdated &&
+        lhs.lessonPosition == rhs.lessonPosition &&
+        lhs.level == rhs.level &&
+        lhs.meaningMnemonic == rhs.meaningMnemonic &&
+        lhs.meanings == rhs.meanings &&
+        lhs.slug == rhs.slug &&
+        lhs.spacedRepetitionSystemID == rhs.spacedRepetitionSystemID &&
+        lhs.url == rhs.url &&
+        lhs.characters == rhs.characters &&
+        lhs.contextSentences == rhs.contextSentences &&
+        lhs.partsOfSpeech == rhs.partsOfSpeech &&
+        lhs.pronunciationAudios == rhs.pronunciationAudios
     }
 }
